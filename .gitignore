@@ -1,0 +1,9 @@
+.qmake.stash
+Makefile
+*.o
+externalIkDemo2
+externalIkDemo2.exe
+Makefile.Debug
+Makefile.Release
+object_script.*.Debug
+object_script.*.Release
