@@ -5,6 +5,14 @@ copying, etc.) contained in the same directory if it is present, or
 under the same terms of the files in the parent directory otherwise.
 
 -----------------------------------------------------------------------
+standAloneKinematicsDemo2, based on externalIkDemo2 from Coppelia Robotics GmbH
+on September 2019
+
+Copyright (C) 2015-2020 Coppelia Robotics GmbH / Marc Freese
+Copyright (C) 2019 Robot Nordic ApS
+
+All rights reserved.
+
 BSD License 2.0
 
 Copyright (c) 2019, Coppelia Robotics GmbH

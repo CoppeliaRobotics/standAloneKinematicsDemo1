@@ -1,4 +1,4 @@
-#include "extIk.h"
+#include "ik.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -6,7 +6,7 @@ extern "C" {
     #include "extApi.h"
 }
 
-// For double-precision, define EXTIK_DOUBLE in the project settings
+// For double-precision, define IK_DOUBLE in the project settings
 
 int main(int argc, char* argv[])
 {
@@ -61,17 +61,17 @@ int main(int argc, char* argv[])
     }
 
     // Initialize the embedded robot model1:
-    int handle1=simEmbLaunch();
-    simEmbStart(data,dataLength);
+    int handle1=ikLaunch();
+    ikStart(data,dataLength);
 
     // Initialize the embedded robot model2:
-    int handle2=simEmbLaunch();
-    simEmbStart(data,dataLength);
+    int handle2=ikLaunch();
+    ikStart(data,dataLength);
 
     delete[] data;
-    simEmbSwitch(handle1); // use robot model1
+    ikSwitch(handle1); // use robot model1
 
-    // Connect to V-REP at the above specified port, via the remote API. V-REP is just used for visual feed-back, not IK calculation!
+    // Connect to CoppeliaSim at the above specified port, via the remote API. CoppeliaSim is just used for visual feed-back, not IK calculation!
     int clientID=simxStart("127.0.0.1",portNb,true,true,2000,5);
     if (clientID!=-1)
     {
@@ -81,38 +81,38 @@ int main(int argc, char* argv[])
         simxSynchronous(clientID,1); // We enable the synchronous mode, so that we can trigger each simulation step from here
 
         int embeddedModelMotorHandles[7];
-        embeddedModelMotorHandles[0]=simEmbGetObjectHandle("LBR_iiwa_7_R800_joint1");
-        embeddedModelMotorHandles[1]=simEmbGetObjectHandle("LBR_iiwa_7_R800_joint2");
-        embeddedModelMotorHandles[2]=simEmbGetObjectHandle("LBR_iiwa_7_R800_joint3");
-        embeddedModelMotorHandles[3]=simEmbGetObjectHandle("LBR_iiwa_7_R800_joint4");
-        embeddedModelMotorHandles[4]=simEmbGetObjectHandle("LBR_iiwa_7_R800_joint5");
-        embeddedModelMotorHandles[5]=simEmbGetObjectHandle("LBR_iiwa_7_R800_joint6");
-        embeddedModelMotorHandles[6]=simEmbGetObjectHandle("LBR_iiwa_7_R800_joint7");
-        int embeddedModelTargetHandle=simEmbGetObjectHandle("LBR_iiwa_7_R800_target");
-        int embeddedModelBaseHandle=simEmbGetObjectHandle("LBR_iiwa_7_R800");
+        embeddedModelMotorHandles[0]=ikGetObjectHandle("LBR_iiwa_7_R800_joint1");
+        embeddedModelMotorHandles[1]=ikGetObjectHandle("LBR_iiwa_7_R800_joint2");
+        embeddedModelMotorHandles[2]=ikGetObjectHandle("LBR_iiwa_7_R800_joint3");
+        embeddedModelMotorHandles[3]=ikGetObjectHandle("LBR_iiwa_7_R800_joint4");
+        embeddedModelMotorHandles[4]=ikGetObjectHandle("LBR_iiwa_7_R800_joint5");
+        embeddedModelMotorHandles[5]=ikGetObjectHandle("LBR_iiwa_7_R800_joint6");
+        embeddedModelMotorHandles[6]=ikGetObjectHandle("LBR_iiwa_7_R800_joint7");
+        int embeddedModelTargetHandle=ikGetObjectHandle("LBR_iiwa_7_R800_target");
+        int embeddedModelBaseHandle=ikGetObjectHandle("LBR_iiwa_7_R800");
 
-        extIkReal v=0.0;
+        simReal v=0.0;
 
         // Get the initial target dummy matrix, of the embedded model:
-        extIkReal matrix[12];
-        simEmbGetObjectMatrix(embeddedModelTargetHandle,embeddedModelBaseHandle,matrix);
+        simReal matrix[12];
+        ikGetObjectMatrix(embeddedModelTargetHandle,embeddedModelBaseHandle,matrix);
 
         int embeddedModelMotorHandles2[7];
-        embeddedModelMotorHandles2[0]=simEmbGetObjectHandle("LBR_iiwa_7_R800_joint1");
-        embeddedModelMotorHandles2[1]=simEmbGetObjectHandle("LBR_iiwa_7_R800_joint2");
-        embeddedModelMotorHandles2[2]=simEmbGetObjectHandle("LBR_iiwa_7_R800_joint3");
-        embeddedModelMotorHandles2[3]=simEmbGetObjectHandle("LBR_iiwa_7_R800_joint4");
-        embeddedModelMotorHandles2[4]=simEmbGetObjectHandle("LBR_iiwa_7_R800_joint5");
-        embeddedModelMotorHandles2[5]=simEmbGetObjectHandle("LBR_iiwa_7_R800_joint6");
-        embeddedModelMotorHandles2[6]=simEmbGetObjectHandle("LBR_iiwa_7_R800_joint7");
-        int embeddedModelTargetHandle2=simEmbGetObjectHandle("LBR_iiwa_7_R800_target");
-        int embeddedModelBaseHandle2=simEmbGetObjectHandle("LBR_iiwa_7_R800");
+        embeddedModelMotorHandles2[0]=ikGetObjectHandle("LBR_iiwa_7_R800_joint1");
+        embeddedModelMotorHandles2[1]=ikGetObjectHandle("LBR_iiwa_7_R800_joint2");
+        embeddedModelMotorHandles2[2]=ikGetObjectHandle("LBR_iiwa_7_R800_joint3");
+        embeddedModelMotorHandles2[3]=ikGetObjectHandle("LBR_iiwa_7_R800_joint4");
+        embeddedModelMotorHandles2[4]=ikGetObjectHandle("LBR_iiwa_7_R800_joint5");
+        embeddedModelMotorHandles2[5]=ikGetObjectHandle("LBR_iiwa_7_R800_joint6");
+        embeddedModelMotorHandles2[6]=ikGetObjectHandle("LBR_iiwa_7_R800_joint7");
+        int embeddedModelTargetHandle2=ikGetObjectHandle("LBR_iiwa_7_R800_target");
+        int embeddedModelBaseHandle2=ikGetObjectHandle("LBR_iiwa_7_R800");
 
-        extIkReal v2=0.0;
+        simReal v2=0.0;
 
         // Get the initial target dummy matrix, of the embedded model:
-        extIkReal matrix2[12];
-        simEmbGetObjectMatrix(embeddedModelTargetHandle2,embeddedModelBaseHandle2,matrix2);
+        simReal matrix2[12];
+        ikGetObjectMatrix(embeddedModelTargetHandle2,embeddedModelBaseHandle2,matrix2);
 
 
         while (simxGetConnectionId(clientID)!=-1)
@@ -121,71 +121,71 @@ int main(int argc, char* argv[])
             // Following 3 commands will slow down the simulation, but garantee that if the simulation time step was changed,
             // that there won't be any jumps. Following 3 commands are not needed if you don't modify the simulation time step
             // (i.e. dt) during simulation.
-            simxUChar vrepWaitingForTrigger=0;
-            while ( (vrepWaitingForTrigger==0)&&(simxGetConnectionId(clientID)!=-1) )
-                simxGetBooleanParameter(clientID,sim_boolparam_waiting_for_trigger,&vrepWaitingForTrigger,simx_opmode_blocking);
+            simxUChar simWaitingForTrigger=0;
+            while ( (simWaitingForTrigger==0)&&(simxGetConnectionId(clientID)!=-1) )
+                simxGetBooleanParameter(clientID,sim_boolparam_waiting_for_trigger,&simWaitingForTrigger,simx_opmode_blocking);
 
             simxGetFloatingParameter(clientID,sim_floatparam_simulation_time_step,&simulationStep,simx_opmode_buffer);
-            v+=extIkReal(0.2)*extIkReal(simulationStep);
-            v2+=extIkReal(0.28)*extIkReal(simulationStep);
+            v+=simReal(0.2)*simReal(simulationStep);
+            v2+=simReal(0.28)*simReal(simulationStep);
 
 
-            simEmbSwitch(handle1); // use robot model1
+            ikSwitch(handle1); // use robot model1
             // Set the desired tip matrix by setting the target dummy matrix:
-            matrix[3]=extIkReal(-0.3-cos(v)*0.1);
-            matrix[7]=extIkReal(sin(v)*0.1);
-            matrix[11]=extIkReal(0.629+sin(v*9)*0.01);
-            simEmbSetObjectMatrix(embeddedModelTargetHandle,embeddedModelBaseHandle,matrix);
+            matrix[3]=simReal(-0.3-cos(v)*0.1);
+            matrix[7]=simReal(sin(v)*0.1);
+            matrix[11]=simReal(0.629+sin(v*9)*0.01);
+            ikSetObjectMatrix(embeddedModelTargetHandle,embeddedModelBaseHandle,matrix);
 
             // calculate IK:
-            simEmbHandleIkGroup(sim_handle_all);
+            ikHandleIkGroup(sim_handle_all);
 
-            // Read the corresponding motor angles and send them to V-REP:
+            // Read the corresponding motor angles and send them to CoppeliaSim:
             simxPauseCommunication(clientID,1); // Temporarily pause the remote API communication, in order to send all following commands at once
-            extIkReal pos;
-            simEmbGetJointPosition(embeddedModelMotorHandles[0],&pos);
+            simReal pos;
+            ikGetJointPosition(embeddedModelMotorHandles[0],&pos);
             simxSetJointPosition(clientID,motorHandles[0],(float)pos,simx_opmode_oneshot);
-            simEmbGetJointPosition(embeddedModelMotorHandles[1],&pos);
+            ikGetJointPosition(embeddedModelMotorHandles[1],&pos);
             simxSetJointPosition(clientID,motorHandles[1],(float)pos,simx_opmode_oneshot);
-            simEmbGetJointPosition(embeddedModelMotorHandles[2],&pos);
+            ikGetJointPosition(embeddedModelMotorHandles[2],&pos);
             simxSetJointPosition(clientID,motorHandles[2],(float)pos,simx_opmode_oneshot);
-            simEmbGetJointPosition(embeddedModelMotorHandles[3],&pos);
+            ikGetJointPosition(embeddedModelMotorHandles[3],&pos);
             simxSetJointPosition(clientID,motorHandles[3],(float)pos,simx_opmode_oneshot);
-            simEmbGetJointPosition(embeddedModelMotorHandles[4],&pos);
+            ikGetJointPosition(embeddedModelMotorHandles[4],&pos);
             simxSetJointPosition(clientID,motorHandles[4],(float)pos,simx_opmode_oneshot);
-            simEmbGetJointPosition(embeddedModelMotorHandles[5],&pos);
+            ikGetJointPosition(embeddedModelMotorHandles[5],&pos);
             simxSetJointPosition(clientID,motorHandles[5],(float)pos,simx_opmode_oneshot);
-            simEmbGetJointPosition(embeddedModelMotorHandles[6],&pos);
+            ikGetJointPosition(embeddedModelMotorHandles[6],&pos);
             simxSetJointPosition(clientID,motorHandles[6],(float)pos,simx_opmode_oneshot);
 
-            simEmbSwitch(handle2); // use robot model2
+            ikSwitch(handle2); // use robot model2
             // Set the desired tip matrix by setting the target dummy matrix:
-            matrix2[3]=extIkReal(-0.3-cos(v2)*0.1);
-            matrix2[7]=extIkReal(sin(v2)*0.1);
-            simEmbSetObjectMatrix(embeddedModelTargetHandle2,embeddedModelBaseHandle2,matrix2);
+            matrix2[3]=simReal(-0.3-cos(v2)*0.1);
+            matrix2[7]=simReal(sin(v2)*0.1);
+            ikSetObjectMatrix(embeddedModelTargetHandle2,embeddedModelBaseHandle2,matrix2);
 
             // calculate IK:
-            simEmbHandleIkGroup(sim_handle_all);
+            ikHandleIkGroup(sim_handle_all);
 
-            // Read the corresponding motor angles and send them to V-REP:
-            simEmbGetJointPosition(embeddedModelMotorHandles2[0],&pos);
+            // Read the corresponding motor angles and send them to CoppeliaSim:
+            ikGetJointPosition(embeddedModelMotorHandles2[0],&pos);
             simxSetJointPosition(clientID,motorHandles2[0],(float)pos,simx_opmode_oneshot);
-            simEmbGetJointPosition(embeddedModelMotorHandles2[1],&pos);
+            ikGetJointPosition(embeddedModelMotorHandles2[1],&pos);
             simxSetJointPosition(clientID,motorHandles2[1],(float)pos,simx_opmode_oneshot);
-            simEmbGetJointPosition(embeddedModelMotorHandles2[2],&pos);
+            ikGetJointPosition(embeddedModelMotorHandles2[2],&pos);
             simxSetJointPosition(clientID,motorHandles2[2],(float)pos,simx_opmode_oneshot);
-            simEmbGetJointPosition(embeddedModelMotorHandles2[3],&pos);
+            ikGetJointPosition(embeddedModelMotorHandles2[3],&pos);
             simxSetJointPosition(clientID,motorHandles2[3],(float)pos,simx_opmode_oneshot);
-            simEmbGetJointPosition(embeddedModelMotorHandles2[4],&pos);
+            ikGetJointPosition(embeddedModelMotorHandles2[4],&pos);
             simxSetJointPosition(clientID,motorHandles2[4],(float)pos,simx_opmode_oneshot);
-            simEmbGetJointPosition(embeddedModelMotorHandles2[5],&pos);
+            ikGetJointPosition(embeddedModelMotorHandles2[5],&pos);
             simxSetJointPosition(clientID,motorHandles2[5],(float)pos,simx_opmode_oneshot);
-            simEmbGetJointPosition(embeddedModelMotorHandles2[6],&pos);
+            ikGetJointPosition(embeddedModelMotorHandles2[6],&pos);
             simxSetJointPosition(clientID,motorHandles2[6],(float)pos,simx_opmode_oneshot);
 
             simxPauseCommunication(clientID,0); // Unpause the remote API communication
 
-            // Now step the simulation on V-REP side:
+            // Now step the simulation on CoppeliaSim side:
             int r=simx_return_remote_error_flag; // means for next remote API function call: step not triggered
             while (r==simx_return_remote_error_flag)
                 r=simxSynchronousTrigger(clientID); // Trigger next simulation step
@@ -194,8 +194,8 @@ int main(int argc, char* argv[])
 
             printf(".");
         }
-        simEmbShutDown(); // End the external IK
-        simEmbShutDown(); // End the external IK
+        ikShutDown(); // End the external IK
+        ikShutDown(); // End the external IK
         simxFinish(clientID); // End the remote API
     }
     return(0);
