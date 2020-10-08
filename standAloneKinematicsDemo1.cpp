@@ -131,8 +131,8 @@ int main(int argc, char* argv[])
                 simxGetBooleanParameter(clientID,sim_boolparam_waiting_for_trigger,&simWaitingForTrigger,simx_opmode_blocking);
 
             simxGetFloatingParameter(clientID,sim_floatparam_simulation_time_step,&simulationStep,simx_opmode_buffer);
-            v+=simReal(0.2)*simReal(simulationStep);
-            v2+=simReal(0.28)*simReal(simulationStep);
+            v+=simReal(0.6)*simReal(simulationStep);
+            v2+=simReal(0.84)*simReal(simulationStep);
 
 
             ikSwitchEnvironment(ikEnvironment1Handle); // use robot model1

@@ -3,7 +3,7 @@ include(config.pri)
 QT -= core
 QT -= gui
 
-TARGET = standAloneKinematicsDemo2
+TARGET = standAloneKinematicsDemo1
 TEMPLATE = app
 
 DEFINES -= UNICODE
@@ -119,5 +119,5 @@ SOURCES += \
     ../simMath/4X4FullMatrix.cpp \
     ../simMath/MMatrix.cpp \
     ../common/shared_memory.c \
-    standAloneKinematicsDemo2.cpp
+    standAloneKinematicsDemo1.cpp
 
