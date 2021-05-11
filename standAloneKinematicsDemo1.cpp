@@ -40,7 +40,11 @@ int main(int argc, char* argv[])
 
     // Read the kinematic file:
     FILE *file;
+#ifdef __APPLE__
+    file=fopen("../Resources/lbr_iiwa_7_r800.ik","rb");
+#else
     file=fopen("lbr_iiwa_7_r800.ik","rb");
+#endif
     unsigned char* data=NULL;
     int dataLength=0;
     if (file)
